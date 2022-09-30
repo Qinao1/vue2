@@ -12,20 +12,20 @@ import Mock from 'mockjs'
 //     }
 //     ]
 // })
-// 定义get请求
-Mock.mock('/spi/mews', 'get', {
-    status: 200,
-    meg: '获取数据成功'
+const { list } = Mock.mock({
+    'list|20-50': [
+        {
+            "id": "@id(2)",
+            "name": "@cname(2)"
+        }
+    ]
+
+
 })
-// console.log(data);
-// 定义拦截post请求
-/* Mock.mock('/api/mews','post',{
-    status:200,
-    meg:'获取数据成功'
-}) */
 Mock.mock('/api/mews', 'post', () => {
     return {
         status: 200,
-        meg: '获取数据成功'
+        title: list,
+        a: 1
     }
 })

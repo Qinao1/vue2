@@ -22,10 +22,11 @@ const { list } = Mock.mock({
 
 
 })
-Mock.mock('/api/mews', 'post', () => {
+Mock.mock('/api/mews', 'get', () => {
     return {
         status: 200,
+        userName:'张三',
+        passWord:'11',
         title: list,
-        a: 1
     }
 })

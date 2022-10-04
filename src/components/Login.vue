@@ -1,13 +1,20 @@
 <template>
-  <div class="logi" v-if="logins">
+  <div class="logi" v-if="n">
     <!-- 登录部分 -->
     <form action="" class="form1" v-show="login">
       <p>用户登录</p>
       账号
-      <el-input placeholder="请输入用户名" v-model="userName" clearable>
+      <el-input
+        placeholder="请输入用户名"
+        @keydown.enter.native="next"
+        v-model="userName"
+        clearable
+      >
       </el-input>
       密码
       <el-input
+        ref="password"
+        @keydown.enter.native="denglu1"
         placeholder="请输入密码"
         v-model="userPassword"
         show-password
@@ -22,22 +29,30 @@
     <form action="" class="form2" v-show="!login">
       <p>注册</p>
       账号
-      <el-input placeholder="请输入用户名" v-model="usernameSign" clearable>
+      <el-input
+        placeholder="请输入用户名"
+        v-model="usernameSign"
+        clearable
+        @keydown.enter.native="next1"
+      >
       </el-input>
       密码
       <el-input
+        ref="userpassWordSign"
+        @keydown.enter.native="next2"
         placeholder="请输入密码"
         v-model="userpassWordSign"
         show-password
       ></el-input>
       确认密码
       <el-input
+        ref="userpassWordAgain1"
         placeholder="请再次输入密码"
         v-model="userpassWordAgain"
         show-password
       ></el-input>
       <div class="login_sign">
-        <span>点击注册</span>
+        <span @click="successSign">点击注册</span>
         <span @click="zuce">返回登录</span>
       </div>
     </form>
@@ -59,6 +74,13 @@
     </el-alert>
     <el-alert v-show="everyone" title="输入不能为空" type="error" show-icon>
     </el-alert>
+    <el-alert
+      v-show="successSigns"
+      title="注册成功"
+      type="success"
+      show-icon
+      :closable="false"
+    ></el-alert>
   </div>
 </template>
 
@@ -76,16 +98,15 @@ export default {
       usernameSign: "",
       userpassWordSign: "",
       userpassWordAgain: "",
+      successSigns: false,
       // 切换
-      login: true,
-      //关闭登录注册页
-      logins: true,
+      login: false,
       //警告部分
       success: false,
       passwordErr: false,
       everyone: false,
-      //   防抖
-      timer: true,
+      // 切换组件
+      n: true,
     };
   },
   methods: {
@@ -108,8 +129,14 @@ export default {
               this.denglu = "登录..";
               this.success = true;
               setTimeout(() => {
-                this.logins = false;
+                this.$store.dispatch("a/change", this.n);
+                this.n = this.$store.state.a.logins;
               }, 1000);
+            } else if (this.userName === "" || this.userPassword === "") {
+              this.everyone = true;
+              setTimeout(() => {
+                this.everyone = false;
+              }, 2000);
             } else {
               this.passwordErr = true;
               setTimeout(() => {
@@ -127,6 +154,51 @@ export default {
           this.everyone = false;
         }, 2000);
       }
+    },
+    // 登录页输入框
+    next() {
+      if (this.userName.length > 0) {
+        this.$nextTick(() => {
+          this.$refs.password.focus();
+        });
+      } else {
+        this.everyone = true;
+        setTimeout(() => {
+          this.everyone = false;
+        }, 2000);
+      }
+    },
+    // 注册页输入框
+    next1() {
+      if (this.usernameSign.length > 0) {
+        this.$nextTick(() => {
+          this.$refs.userpassWordSign.focus();
+        });
+      } else {
+        this.everyone = true;
+        setTimeout(() => {
+          this.everyone = false;
+        }, 2000);
+      }
+    },
+    next2() {
+      if (this.userpassWordSign.length > 0) {
+        this.$nextTick(() => {
+          this.$refs.userpassWordAgain1.focus();
+        });
+      } else {
+        this.everyone = true;
+        setTimeout(() => {
+          this.everyone = false;
+        }, 2000);
+      }
+    },
+    successSign() {
+      this.successSigns = true;
+      setTimeout(() => {
+        this.$store.dispatch("a/change", this.n);
+        this.n = this.$store.state.a.logins;
+      }, 1000);
     },
   },
 };
@@ -188,7 +260,7 @@ export default {
     span {
       display: inline;
       color: #fff;
-      width: 40px;
+      width: 60px;
       height: 20px;
       line-height: 20px;
       background-color: #a52a2a;

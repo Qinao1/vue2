@@ -1,27 +1,22 @@
 <template>
   <div id="app">
-    <Home v-if="show"></Home>
-    <Login/>
+    <Home/>
+    <Login />
   </div>
 </template>
 
 <script>
-import Login from './components/Login.vue'
-import Home from './components/Home.vue'
+import Login from "./components/Login.vue";
+import Home from "./components/Home.vue";
 export default {
   name: "App",
-  components: { Login,Home},
-  data() {
-    return {
-      show:false
-    }
-  },
+  components: { Login, Home },
 };
 </script>
 <style>
-  html,
+html,
 body,
-#app{
+#app {
   height: 100%;
 }
 </style>

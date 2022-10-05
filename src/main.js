@@ -13,7 +13,7 @@ import VueRouter from 'vue-router'
 // 引入路由器
 // import router from './router'
 // 按需引入element UI
-import { Input, Alert,Row,Col,Menu,Submenu,MenuItemGroup,MenuItem} from 'element-ui';
+import { Input, Alert,Row,Col,Menu,Submenu,MenuItemGroup,MenuItem,Button,Tooltip} from 'element-ui';
 // 引入 store vuex
 import store from './store/index'
 // 使用less
@@ -29,6 +29,8 @@ Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItemGroup)
 Vue.use(MenuItem)
+Vue.use(Tooltip)
+Vue.use(Button)
 new Vue({
   render: h => h(App),
   // router,

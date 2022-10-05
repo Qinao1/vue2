@@ -46,7 +46,8 @@
       ></el-input>
       确认密码
       <el-input
-        ref="userpassWordAgain1"
+      @keydown.enter.native="successSign"
+      ref="userpassWordAgain"
         placeholder="请再次输入密码"
         v-model="userpassWordAgain"
         show-password
@@ -100,7 +101,7 @@ export default {
       userpassWordAgain: "",
       successSigns: false,
       // 切换
-      login: false,
+      login: true,
       //警告部分
       success: false,
       passwordErr: false,
@@ -184,7 +185,7 @@ export default {
     next2() {
       if (this.userpassWordSign.length > 0) {
         this.$nextTick(() => {
-          this.$refs.userpassWordAgain1.focus();
+          this.$refs.userpassWordAgain.focus();
         });
       } else {
         this.everyone = true;
@@ -194,11 +195,26 @@ export default {
       }
     },
     successSign() {
-      this.successSigns = true;
-      setTimeout(() => {
-        this.$store.dispatch("a/change", this.n);
-        this.n = this.$store.state.a.logins;
-      }, 1000);
+      if (
+        this.usernameSign.length > 0 &&
+        this.userpassWordSign.length > 0 &&
+        this.userpassWordAgain.length > 0
+      ) {
+        this.successSigns = true;
+        this.usernameSign = "";
+        this.userpassWordSign = "";
+        this.userpassWordAgain=""
+         setTimeout(() => {
+          this.successSigns = false;
+        }, 1000);
+      } else if(this.userpassWordSign !==this.userpassWordAgain){
+alert('两次输入不一致')
+      }else {
+        this.everyone = true;
+        setTimeout(() => {
+          this.everyone = false;
+        }, 2000);
+      }
     },
   },
 };

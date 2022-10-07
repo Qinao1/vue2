@@ -13,10 +13,13 @@ import Mock from 'mockjs'
 //     ]
 // })
 const { list } = Mock.mock({
-    'list|20-50': [
+    'list|20': [
         {
             "id": "@id(2)",
-            "name": "@cname(2)"
+            "date":'@date("yyyy-MM-dd")',
+            "name": "@cname(2,3)",
+            "address":"@county(true)",
+            'phone': "177777777777"
         }
     ]
 

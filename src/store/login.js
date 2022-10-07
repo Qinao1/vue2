@@ -18,7 +18,7 @@ export default {
     // 用于储存数据
     state: {
         //关闭登录注册页
-        logins: true,
+        logins: false,
     },
     // 用于加个state
     getters: {

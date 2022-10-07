@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import 'default-passive-events'
 // 引入mock数据
 import './mock/index.js'
 // 引入less
@@ -11,9 +12,9 @@ import 'normalize.css/normalize.css'
 // 引入VueRouter
 import VueRouter from 'vue-router'
 // 引入路由器
-// import router from './router'
+import router from './router'
 // 按需引入element UI
-import { Input, Alert,Row,Col,Menu,Submenu,MenuItemGroup,MenuItem,Button,Tooltip} from 'element-ui';
+import { Input, Alert,Descriptions, Row, Col, Menu, Submenu, MenuItemGroup, MenuItem, Button, Tooltip, Dialog, MessageBox, Table, TableColumn, Pagination } from 'element-ui';
 // 引入 store vuex
 import store from './store/index'
 // 使用less
@@ -31,11 +32,17 @@ Vue.use(MenuItemGroup)
 Vue.use(MenuItem)
 Vue.use(Tooltip)
 Vue.use(Button)
+Vue.use(Dialog)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
+Vue.use(Descriptions)
+Vue.prototype.$confirm = MessageBox.confirm;
 new Vue({
   render: h => h(App),
-  // router,
+  router,
   store,
-  beforeCreate(){
-    Vue.prototype.$bus=this//安装全局事件总线
+  beforeCreate() {
+    Vue.prototype.$bus = this//安装全局事件总线
   }
 }).$mount('#app')

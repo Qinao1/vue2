@@ -1,5 +1,5 @@
 <template>
-  <div class="logi" v-if="n">
+  <div class="logi" v-show="loginss">
     <!-- 登录部分 -->
     <form action="" class="form1" v-show="login">
       <p>用户登录</p>
@@ -46,8 +46,8 @@
       ></el-input>
       确认密码
       <el-input
-      @keydown.enter.native="successSign"
-      ref="userpassWordAgain"
+        @keydown.enter.native="successSign"
+        ref="userpassWordAgain"
         placeholder="请再次输入密码"
         v-model="userpassWordAgain"
         show-password
@@ -110,6 +110,16 @@ export default {
       n: true,
     };
   },
+  computed: {
+    loginss: {
+      get() {
+        return this.$store.state.a.logins;
+      },
+      set(value) {
+        this.$store.dispatch("a/change", !value);
+      },
+    },
+  },
   methods: {
     zuce() {
       this.login = !this.login;
@@ -131,7 +141,10 @@ export default {
               this.success = true;
               setTimeout(() => {
                 this.$store.dispatch("a/change", this.n);
-                this.n = this.$store.state.a.logins;
+                this.success = false;
+                this.denglu = "登录";
+                this.userName = "";
+                this.userPassword = "";
               }, 1000);
             } else if (this.userName === "" || this.userPassword === "") {
               this.everyone = true;
@@ -203,13 +216,13 @@ export default {
         this.successSigns = true;
         this.usernameSign = "";
         this.userpassWordSign = "";
-        this.userpassWordAgain=""
-         setTimeout(() => {
+        this.userpassWordAgain = "";
+        setTimeout(() => {
           this.successSigns = false;
         }, 1000);
-      } else if(this.userpassWordSign !==this.userpassWordAgain){
-alert('两次输入不一致')
-      }else {
+      } else if (this.userpassWordSign !== this.userpassWordAgain) {
+        alert("两次输入不一致");
+      } else {
         this.everyone = true;
         setTimeout(() => {
           this.everyone = false;
@@ -242,8 +255,8 @@ alert('两次输入不一致')
   font-size: 13px;
   color: #fff;
   p {
-    height: 20px;
-    line-height: 20px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     font-size: 20px;
     letter-spacing: 5px;

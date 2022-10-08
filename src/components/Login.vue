@@ -34,6 +34,7 @@
         v-model="usernameSign"
         clearable
         @keydown.enter.native="next1"
+        ref="nameinput"
       >
       </el-input>
       密码
@@ -128,6 +129,7 @@ export default {
       this.usernameSign = "";
       this.userpassWordAgain = "";
       this.usernameSign = "";
+      this.userpassWordSign="";
     },
     denglu1() {
       if (this.userName !== "" || this.userPassword !== "") {
@@ -211,7 +213,7 @@ export default {
       if (
         this.usernameSign.length > 0 &&
         this.userpassWordSign.length > 0 &&
-        this.userpassWordAgain.length > 0
+        this.userpassWordAgain.length > 0 && this.userpassWordSign === this.userpassWordAgain
       ) {
         this.successSigns = true;
         this.usernameSign = "";
@@ -220,13 +222,10 @@ export default {
         setTimeout(() => {
           this.successSigns = false;
         }, 1000);
-      } else if (this.userpassWordSign !== this.userpassWordAgain) {
+      } else if (this.userpassWordSign !== this.userpassWordAgain && this.usernameSign.length > 0) {
         alert("两次输入不一致");
       } else {
-        this.everyone = true;
-        setTimeout(() => {
-          this.everyone = false;
-        }, 2000);
+        alert('输入不能为空')
       }
     },
   },

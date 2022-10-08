@@ -3,7 +3,10 @@
     <div class="operation">
       <div class="chaozuo">
         <span class="add el-icon-plus">添加</span
-        ><span class="delete el-icon-delete">删除</span>
+        ><span class="delete el-icon-delete" @click="revomveUsers">
+          <!--  @click="toggleSelection()" :disabled="userIds.length === 0"  //这里是当里面的id为空，那么他就不能被选中-->
+          删除</span
+        >
       </div>
       <div class="search el-icon-search">搜索</div>
     </div>
@@ -15,7 +18,11 @@
       tooltip-effect="dark"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column
+        type="selection"
+        width="55"
+        ref="check"
+      ></el-table-column>
       <el-table-column label="日期" width="120">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
@@ -65,22 +72,28 @@
             ><input type="text" :value="name" ref="input"
           /></el-descriptions-item>
           <el-descriptions-item label="手机号"
-            ><input type="number" :value="phone"  ref="input1"
+            ><input type="number" :value="phone" ref="input1"
           /></el-descriptions-item>
-          <el-descriptions-item label="现居住地"
-            >{{nowaddress}}</el-descriptions-item>
+          <el-descriptions-item label="现居住地">{{
+            nowaddress
+          }}</el-descriptions-item>
           <el-descriptions-item label="性别">
             <el-tag size="small">{{ sex }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item
             label="联系地址"
             :contentStyle="{ 'text-align': 'left' }"
-            ><input type="text" :value="address" ref="input2" style="width: 100%;"
-          /></el-descriptions-item
-          >
+            ><input
+              type="text"
+              :value="address"
+              ref="input2"
+              style="width: 100%"
+          /></el-descriptions-item>
         </el-descriptions>
-        <div class="save"><el-button @click="noSave">取消</el-button>
-  <el-button type="primary" @click="save">保存</el-button></div>
+        <div class="save">
+          <el-button @click="noSave">取消</el-button>
+          <el-button type="primary" @click="save">保存</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -96,7 +109,7 @@ export default {
       pageSize: 6, //每一页显示的数据量 此处每页显示6条数据
       // 模拟数据
       tableData: [],
-      multipleSelection: [], //用来删除
+      userIds: [], //用来删除
       //用户信息
       name: "",
       phone: "",
@@ -104,21 +117,12 @@ export default {
       nowaddress: "",
       sex: "",
       userinfo: false,
-      num:'',
+      num: "",
     };
   },
   methods: {
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleSelectionChange(selection) {
+      this.userIds = selection
     },
     handleEdit(index, row) {
       // 编辑
@@ -128,14 +132,14 @@ export default {
       this.address = row.address;
       this.nowaddress = row.nowaddress;
       this.sex = row.gender;
-      this.num=index
+      this.num = index;
       this.$nextTick(() => {
         this.$refs.input.focus();
       });
-      
     },
     handleDelete(index, row) {
       // 删除
+      // console.log(index);
       this.tableData.splice(index, 1);
     },
     //点击按钮切换页面
@@ -143,14 +147,20 @@ export default {
       this.currentPage = currentPage; //每次点击分页按钮，当前页发生变化
       // console.log(this.currentPage);
     },
-    noSave(){
-      this.userinfo=!this.userinfo
+    noSave() {
+      this.userinfo = !this.userinfo;
     },
-    save(){
-      this.userinfo=!this.userinfo
-      this.tableData[this.num].name=this.$refs.input.value
-      this.tableData[this.num].phone=this.$refs.input1.value
-      this.tableData[this.num].address=this.$refs.input2.value
+    save() {
+      this.userinfo = !this.userinfo;
+      this.tableData[this.num].name = this.$refs.input.value;
+      this.tableData[this.num].phone = this.$refs.input1.value;
+      this.tableData[this.num].address = this.$refs.input2.value;
+    },
+    revomveUsers() {
+     
+      this.tableData= this.tableData.filter(item => !this.userIds.some(ele=>ele.id===item.id))
+      console.log(this.tableData);
+      this.$refs.multipleTable.clearSelection();
     },
   },
   mounted() {
@@ -241,11 +251,11 @@ export default {
   input[type="number"] {
     appearance: textfield;
   }
-  .save{
+  .save {
     display: flex;
     justify-content: end;
     background-color: #ffffff;
-    .el-button{
+    .el-button {
       margin: 10px;
     }
   }

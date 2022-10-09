@@ -16,11 +16,16 @@
               <span>人员列表</span>
             </template>
             <el-menu-item-group>
-              <router-link 
-              active-class="active"
-            to="/PersonList"><el-menu-item index="1-1">人员信息查看</el-menu-item></router-link>
-              <router-link active-class="active"
-            to="/PersonnelDistribution"><el-menu-item index="1-2">查看人员分布地区</el-menu-item></router-link>
+              <router-link active-class="active" to="/PersonList"
+                ><el-menu-item index="1-1"
+                  >人员信息查看</el-menu-item
+                ></router-link
+              >
+              <router-link active-class="active" to="/PersonnelDistribution"
+                ><el-menu-item index="1-2"
+                  >查看人员分布地区</el-menu-item
+                ></router-link
+              >
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
               <el-menu-item index="1-3">选项3</el-menu-item>
@@ -84,7 +89,9 @@
             <div class="userset" v-show="x">
               <ul>
                 <li @click="dialogVisible = true">个人中心</li>
-                <li>修改密码</li>
+                <li>
+                  <el-button type="text" @click="open">修改密码</el-button>
+                </li>
                 <li style="border-top: 1px solid gray" @click="tuichu">退出</li>
               </ul>
             </div>
@@ -174,7 +181,6 @@ export default {
     set1() {
       this.x = false;
     },
-
     tuichu() {
       this.login = !this.login;
     },
@@ -184,6 +190,28 @@ export default {
           done();
         })
         .catch((_) => {});
+    },
+    open() {
+      this.$prompt("密码格式为数字", "请输入新的密码", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[0-9]*$/,
+        inputErrorMessage: "密码格式不正确",
+      })
+        .then(({ value }) => {
+          if (value.length > 0) 
+            this.$message({
+              type: "success",
+              message: "你的密码是: " + value,
+            });
+          
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
     },
   },
   mounted() {
@@ -247,7 +275,7 @@ export default {
 .zujianShow {
   width: 100%;
   height: 100%;
-   background-color: #f5f7f9;
+  background-color: #f5f7f9;
   .header {
     display: flex;
     flex-flow: row nowrap;
@@ -270,7 +298,7 @@ export default {
       align-items: center;
     }
   }
-  .body{
+  .body {
     width: 100%;
     height: 92%;
   }

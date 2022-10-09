@@ -24,8 +24,12 @@ const { list } = Mock.mock({
             'phone': "177777777777"
         }
     ]
-
-
+})
+const {id }=Mock.mock({
+    "id":{
+        "id": "@id(2)",
+        "nowaddress":"@province()",
+    }
 })
 Mock.mock('/api/mews', 'get', () => {
     return {
@@ -33,5 +37,6 @@ Mock.mock('/api/mews', 'get', () => {
         userName:'张三',
         passWord:'11',
         title: list,
+        ids:id
     }
 })

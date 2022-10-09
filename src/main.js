@@ -14,7 +14,7 @@ import VueRouter from 'vue-router'
 // 引入路由器
 import router from './router'
 // 按需引入element UI
-import { Input,Tag, Alert,Descriptions, DescriptionsItem,Row, Col, Menu, Submenu, MenuItemGroup, MenuItem, Button, Tooltip, Dialog, MessageBox, Table, TableColumn, Pagination } from 'element-ui';
+import {Message,Input,Radio,DatePicker,Tag,Drawer,Form,FormItem, Alert,Descriptions, DescriptionsItem,Row, Col, Menu, Submenu, MenuItemGroup, MenuItem, Button, Tooltip, Dialog, MessageBox, Table, TableColumn, Pagination } from 'element-ui';
 // 引入 store vuex
 import store from './store/index'
 // 使用less
@@ -39,7 +39,15 @@ Vue.use(Pagination)
 Vue.use(Descriptions)
 Vue.use(DescriptionsItem)
 Vue.use(Tag)
+Vue.use(Drawer)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Radio)
+Vue.use(DatePicker)
+// Vue.use(Message);//小心
 Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt
+Vue.prototype.$message = Message;
 new Vue({
   render: h => h(App),
   router,

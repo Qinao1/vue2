@@ -15,20 +15,19 @@ import Mock from 'mockjs'
 const { list } = Mock.mock({
     'list|100-300': [
         {
-            "id": "@id(2)",
+            "id": "@id()",
             "date":'@date("yyyy-MM-dd")',
             "name": "@cname(2,3)",
             "gender|1":['男','女'],
             "address":"@county(true)",
             "nowaddress":"@province()",
-            'phone': "177777777777"
+            'phone': /^1(5|3|7|8)[0-9]{9}$/
         }
     ]
 })
-const {id }=Mock.mock({
-    "id":{
-        "id": "@id(2)",
-        "nowaddress":"@province()",
+const {address }=Mock.mock({
+    "address":{
+        "nowaddress":"@city",
     }
 })
 Mock.mock('/api/mews', 'get', () => {
@@ -37,6 +36,6 @@ Mock.mock('/api/mews', 'get', () => {
         userName:'张三',
         passWord:'11',
         title: list,
-        ids:id
+        ids: address,
     }
 })

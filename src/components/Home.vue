@@ -23,7 +23,7 @@
               >
               <router-link active-class="active" to="/PersonnelDistribution"
                 ><el-menu-item index="1-2"
-                  >查看人员分布地区</el-menu-item
+                  >查看人员状况</el-menu-item
                 ></router-link
               >
             </el-menu-item-group>
@@ -145,7 +145,7 @@ export default {
     // 主页关闭，显示登录页
     login: {
       get() {
-        return this.$store.state.a.logins;
+        return ;this.$store.state.a.logins
       },
       set(value) {
         this.$store.dispatch("a/change", !value);

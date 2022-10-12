@@ -1,6 +1,3 @@
-// 登录页面相关配置
-import axios from 'axios'
-
 export default {
     namespaced: true,//命名空间，默认是flase
     // 准备actions--用于响应组件中的动作

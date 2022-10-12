@@ -17,6 +17,11 @@ import router from './router'
 import {Message,Input,Radio,DatePicker,Tag,Drawer,Form,FormItem, Alert,Descriptions, DescriptionsItem,Row, Col, Menu, Submenu, MenuItemGroup, MenuItem, Button, Tooltip, Dialog, MessageBox, Table, TableColumn, Pagination } from 'element-ui';
 // 引入 store vuex
 import store from './store/index'
+//引入echarts
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+// import echarts from 'echarts' 引入echarts后，不能全局使用echarts,
+// 所以通过Vue.prototype 将echarts保存为全局变量。原则上$echarts可以为任意变量名
 // 使用less
 Vue.use(less)
 //使用插件

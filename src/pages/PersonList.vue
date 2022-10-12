@@ -10,7 +10,13 @@
           删除</span
         >
       </div>
-      <div class="search el-icon-search">搜索</div>
+      <el-input
+        style="width: 300px; margin-right: 100px"
+        v-model="search"
+        size="mini"
+        placeholder="输入姓名关键字搜索"
+        prop="search"
+      />
     </div>
     <el-table
       ref="multipleTable"
@@ -20,6 +26,8 @@
       tooltip-effect="dark"
       @selection-change="handleSelectionChange"
     >
+      <!-- tableData.filter((data) => !search || data.name.toLowerCase().includes(search.toLowerCase()))
+     -->
       <el-table-column
         type="selection"
         width="55"
@@ -50,6 +58,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      ref="fenye"
       background
       layout="prev, pager, next,jumper, ->, total"
       :total="tableData.length"
@@ -143,7 +152,7 @@
             :label-width="formLabelWidth"
             prop="phone"
           >
-          <!-- onkeydown="value=value.replace(/^[0-9]*$/g,' ')" -->
+            <!-- onkeydown="value=value.replace(/^[0-9]*$/g,' ')" -->
             <el-input v-model="form.phone" clearable></el-input>
           </el-form-item>
         </el-form>
@@ -151,10 +160,7 @@
           <el-button @click="cancelForm">取 消</el-button>
           <el-button
             type="primary"
-            @click="
-              $refs.drawer.closeDrawer();
-              submitForm('form');
-            "
+            @click="$refs.drawer.closeDrawer()"
             :loading="loading"
             >{{ loading ? "提交中 ..." : "确 定" }}</el-button
           >
@@ -178,43 +184,48 @@ export default {
     const Shuru = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入用户名"));
-      }else
+      }
       //校验中文的正则：/^[\u4e00-\u9fa5]{0,}$/
-      if (/^[\u4e00-\u9fa5]+$/.test(value) == false) {
-        this.verificationFailed=false
-               return callback(new Error("请输入中文名称"));
-             
-              } else {
-                //校验通过
-                this.verificationFailed=true
-                callback();
-              }
+      else if (/^[\u4e00-\u9fa5]+$/.test(value) == false) {
+        this.verificationFailed = false;
+        return callback(new Error("请输入中文名称"));
+      } else {
+        //校验通过
+        this.verificationFailed = true;
+        callback();
+      }
     };
-  const Shuru1 = (rule, value, callback) => {
+    const Shuru1 = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("请输入地址"));
       }
     };
     const Shuru2 = (rule, value, callback) => {
-       if (!value) {
+      if (!value) {
         return callback(new Error("请输入手机号"));
-      }else
+      }
       //校验手机的正则：/^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])d{8}$/
-      if (/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(value) == false) {
-        this.verificationFailed1=false
-               return callback(new Error("请输入正确的手机号"));
-              } else {
-                //校验通过
-                this.verificationFailed1=true
-                callback();
-              }
+      else if (
+        /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(
+          value
+        ) == false
+      ) {
+        this.verificationFailed1 = false;
+        return callback(new Error("请输入正确的手机号"));
+      } else {
+        //校验通过
+        this.verificationFailed1 = true;
+        callback();
+      }
     };
     return {
       currentPage: 1, //当前页 刷新后默认显示第一页
       pageSize: 6, //每一页显示的数据量 此处每页显示6条数据
       // 模拟数据
       tableData: [],
+      newtableData: [], //接数据
       userIds: [], //用来删除
+      tableDatasex: [], //删选性别
       //用户信息
       name: "",
       phone: "",
@@ -224,12 +235,15 @@ export default {
       userinfo: false,
       num: "",
       // 判断验证失败用
-      verificationFailed:true,
-      verificationFailed1:true,
+      verificationFailed: true,
+      verificationFailed1: true,
       // 添加表单
       table: false,
       dialog: false,
       loading: false,
+      // 搜索
+      search: "",
+      numberrr: 1,
       form: {
         id: "",
         date: "",
@@ -247,12 +261,54 @@ export default {
         name: [{ validator: Shuru, trigger: "blur" }],
         address: [{ validator: Shuru1, trigger: "blur" }],
         phone: [{ validator: Shuru2, trigger: "blur" }],
+        search: [{ validator: Shuru, trigger: "blur" }],
       },
     };
+  },
+  computed: {
+    tableData1: {
+      get() {
+        return this.$store.state.b.tableData;
+      },
+      // console.log(this.$store.state.b.tableData);
+    },
+  },
+  watch: {
+    tableData1: {
+      handler(newValue, oldValue) {
+        this.tableData = newValue;
+      },
+    },
+    search: {
+      // deep:true,
+      // immediate: true,
+      handler(newValue, oldValue) {
+        console.log("search被修改了", newValue);
+        if (newValue !== "") {
+          if (this.numberrr === 1) {
+            this.newtableData = this.tableData;
+            this.numberrr = 2;
+          }
+          this.currentPage = 1;
+          this.tableData = this.newtableData.filter(
+            (data) =>
+              !this.search ||
+              data.name.toLowerCase().includes(this.search.trim().toLowerCase())
+          );
+          this.tableDatasex = this.newtableData.filter(
+            (data) => data.sex.length
+          );;
+          // this.tableData=this.tableData.filter((data) => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
+        } else {
+          this.tableData = this.newtableData;
+        }
+      },
+    },
   },
   methods: {
     handleSelectionChange(selection) {
       this.userIds = selection;
+      // console.log(this.userIds);
     },
     handleEdit(index, row) {
       // 编辑
@@ -295,86 +351,75 @@ export default {
     },
     // 添加表单
     handleClose(done) {
-      if(this.verificationFailed&&this.verificationFailed1){
+      if (this.verificationFailed && this.verificationFailed1) {
         if (this.loading) {
-        return;
-      }
-      this.$confirm("确定要提交表单吗？")
-        .then((_) => {
-          if (
-            this.form.date !== "" &&
-            this.form.name !== "" &&
-            this.form.gender !== "" &&
-            this.form.address !== "" &&
-            this.form.phone !== ""
-          ) {
-            this.loading = true;
-            axios.get("/api/mews").then(
+          return;
+        }
+        this.$confirm("确定要提交表单吗？")
+          .then((_) => {
+            if (
+              this.form.date !== "" &&
+              this.form.name !== "" &&
+              this.form.gender !== "" &&
+              this.form.address !== "" &&
+              this.form.phone !== ""
+            ) {
+              this.loading = true;
+              this.form.id = window.crypto.randomUUID();
+              // console.log(this.form.id);
+              axios.get("/api/mews").then(
                 (response) => {
-                  this.form.id = response.data.ids.id;
                   this.form.nowaddress = response.data.ids.nowaddress;
                 },
                 (error) => {
                   console.log("请求失败了", error.message);
                 }
               );
-            this.timer = setTimeout(() => {
-              this.tableData.unshift({
-                id: this.form.id,
-                date: this.form.date,
-                name: this.form.name,
-                nowaddress: this.form.nowaddress,
-                gender: this.form.gender,
-                address: this.form.address,
-                phone: this.form.phone,
-              });
-              this.form.date = "";
-              this.form.name = "";
-              this.form.gender = "男";
-              this.form.address = "";
-              this.form.phone = "";
-              done();
-              // 动画关闭需要一定的时间
-              setTimeout(() => {
-                this.loading = false;
-              }, 400);
-            }, 2000);
-          } else {
-            alert('输入不能为空')
-          }
-        })
-        .catch((_) => {});
-      }else {
-        alert('输入错误')
+              this.timer = setTimeout(() => {
+                this.tableData.unshift({
+                  id: this.form.id,
+                  date: this.form.date,
+                  name: this.form.name,
+                  nowaddress: this.form.nowaddress,
+                  gender: this.form.gender,
+                  address: this.form.address,
+                  phone: this.form.phone,
+                });
+                this.form.date = "";
+                this.form.id = "";
+                this.form.nowaddress = "";
+                this.form.name = "";
+                this.form.gender = "男";
+                this.form.address = "";
+                this.form.phone = "";
+                done();
+                // 动画关闭需要一定的时间
+                setTimeout(() => {
+                  this.loading = false;
+                }, 400);
+              }, 1000);
+            } else {
+              alert("输入不能为空");
+            }
+          })
+          .catch((_) => {});
+      } else {
+        alert("输入错误");
       }
-      
     },
     cancelForm() {
       this.loading = false;
       this.dialog = false;
       clearTimeout(this.timer);
     },
-    // 验证表单
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
   },
-  mounted() {
-    axios.get("/api/mews").then(
-      (response) => {
-        this.tableData = response.data.title;
-      },
-      (error) => {
-        console.log("请求失败了", error.message);
-      }
-    );
+  created() {
+    this.$store.dispatch("b/qingqiu");
+    // beforeunload事件在页面刷新时先触发
+    // window.addEventListener('beforeunload', () => {
+    //   sessionStorage.setItem('store', JSON.stringify(this.$store.state))
+    //   console.log(2);
+    // })
   },
 };
 </script>
@@ -475,5 +520,4 @@ export default {
   justify-content: end;
   margin-right: 30px;
 }
-
 </style>

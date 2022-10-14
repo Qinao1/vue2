@@ -2,7 +2,6 @@
   <div id="app">
     <Home></Home>
     <Login />
-
   </div>
 </template>
 

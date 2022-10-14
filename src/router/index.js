@@ -6,11 +6,24 @@ import PersonnelDistribution from '../pages/PersonnelDistribution'
 
 // 创建并暴露一个路由器
 const router = new VueRouter({
+    
     mode:'hash',//默认是hash //哈希值 history
     routes: [
         {
             name: 'renyuanliebiao',
             path: '/PersonList',
+            component: PersonList,
+            meta: { isAuth: true,title: '人员列表' }
+        },
+        {
+            name: 'renyuanliebiao1',
+            path: '/login',
+            component: PersonList,
+            meta: { isAuth: true,title: '人员列表' }
+        },
+        {
+            name: 'renyuanliebiao2',
+            path: '/',
             component: PersonList,
             meta: { isAuth: true,title: '人员列表' }
         },
@@ -22,6 +35,7 @@ const router = new VueRouter({
         }
         
     ]
+    
 })
 
 export default router

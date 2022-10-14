@@ -1,36 +1,50 @@
 <template>
   <div>
-    <div id="main"></div>
+    <div id="main" ref="maina"></div>
+    <h2 >SaaS{{manNumber}}</h2>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "PersonnelDistribution",
   data() {
     return {
-      tableDataone: [],
+      manNumber:'',
+      womanNumber:''
     };
   },
   computed: {
-    tableData1: {
-      get() {
-        return this.$store.state.b.tableData;
-      },
+		man(){
+       this.manNumber= this.$store.getters['b/man']
+       return this.$store.getters['b/man']
     },
+    woman(){
+      this.womanNumber= this.$store.getters['b/woman']
+       return this.$store.getters['b/woman']
+    }
   },
   watch:{
-    tableData1: {
-      handler(newValue, oldValue) {
-        this.tableDataone = newValue; 
-      },
+    man:{
+      handler(newValue,oldValue){
+            this.manNumber=newValue
+            this.echarts()
+            
+      }
     },
+    woman:{
+      handler(newValue,oldValue){
+            this.womanNumber=newValue
+            this.echarts()
+      }
+    }
   },
   methods: {
-    myEcharts() {
+    echarts() {
       // 基于准备好的dom，初始化echarts实例
       // 修改echarts.init()为this.$echarts.init() [因为上面第二步，将echarts保存到全局变量$echarts中]
-      let myChart = this.$echarts.init(document.getElementById("main"));
+      let chart = this.$echarts.init(this.$refs.maina);
       // 指定图表的配置项和数据
       let option = {
         tooltip: {
@@ -61,20 +75,19 @@ export default {
               show: false,
             },
             data: [
-              { value: this.manone , name: "男" },
-              { value: 235, name: "女" },
+              { value: this.manNumber , name: "男" },
+              { value: this.womanNumber, name: "女" },
             ],
           },
         ],
       };
-
+    
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
+      chart.setOption(option,true);
     },
   },
   mounted() {
-    this.myEcharts();
-    this.$store.dispatch("b/qingqiu");
+      this.echarts();
   },
 };
 </script>

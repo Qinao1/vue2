@@ -54,6 +54,7 @@
         show-password
       ></el-input>
       <div class="login_sign">
+        
         <span @click="successSign">点击注册</span>
         <span @click="zuce">返回登录</span>
       </div>
@@ -229,6 +230,7 @@ export default {
       }
     },
   },
+
 };
 </script>
 

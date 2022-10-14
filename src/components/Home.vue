@@ -145,7 +145,7 @@ export default {
     // 主页关闭，显示登录页
     login: {
       get() {
-        return ;this.$store.state.a.logins
+        return this.$store.state.a.logins
       },
       set(value) {
         this.$store.dispatch("a/change", !value);
@@ -183,6 +183,7 @@ export default {
     },
     tuichu() {
       this.login = !this.login;
+      this.$router.push('/login')
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -224,6 +225,8 @@ export default {
       }
     );
   },
+
+
 };
 </script>
 

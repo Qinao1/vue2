@@ -225,7 +225,6 @@ export default {
       tableData: [],
       newtableData: [], //接数据
       userIds: [], //用来删除
-      tableDatasex: [], //删选性别
       //用户信息
       name: "",
       phone: "",
@@ -283,7 +282,7 @@ export default {
       // deep:true,
       // immediate: true,
       handler(newValue, oldValue) {
-        console.log("search被修改了", newValue);
+        // console.log("search被修改了", newValue);
         if (newValue !== "") {
           if (this.numberrr === 1) {
             this.newtableData = this.tableData;
@@ -295,9 +294,6 @@ export default {
               !this.search ||
               data.name.toLowerCase().includes(this.search.trim().toLowerCase())
           );
-          this.tableDatasex = this.newtableData.filter(
-            (data) => data.sex.length
-          );;
           // this.tableData=this.tableData.filter((data) => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
         } else {
           this.tableData = this.newtableData;
@@ -307,6 +303,7 @@ export default {
   },
   methods: {
     handleSelectionChange(selection) {
+      console.log(selection);
       this.userIds = selection;
       // console.log(this.userIds);
     },
@@ -323,10 +320,17 @@ export default {
         this.$refs.input.focus();
       });
     },
+    // 单独删除
     handleDelete(index, row) {
-      // 删除
-      // console.log(index);
-      this.tableData.splice(index, 1);
+      // console.log(this.tableData);
+      this.tableData = this.tableData.filter(function(value,index){
+        return value.id !== row.id
+      }
+      );
+      this.newtableData = this.newtableData.filter(function(value,index){
+        return value.id !== row.id
+      }
+      );
     },
     //点击按钮切换页面
     handleCurrentChange(currentPage) {
@@ -336,14 +340,19 @@ export default {
     noSave() {
       this.userinfo = !this.userinfo;
     },
+    // 编辑保存
     save() {
       this.userinfo = !this.userinfo;
       this.tableData[this.num].name = this.$refs.input.value;
       this.tableData[this.num].phone = this.$refs.input1.value;
       this.tableData[this.num].address = this.$refs.input2.value;
     },
+    // 多选删除
     revomveUsers() {
       this.tableData = this.tableData.filter(
+        (item) => !this.userIds.some((ele) => ele.id === item.id)
+      );
+      this.newtableData = this.newtableData.filter(
         (item) => !this.userIds.some((ele) => ele.id === item.id)
       );
       // console.log(this.tableData);
@@ -385,6 +394,15 @@ export default {
                   address: this.form.address,
                   phone: this.form.phone,
                 });
+                this.newtableData.unshift({
+                  id: this.form.id,
+                  date: this.form.date,
+                  name: this.form.name,
+                  nowaddress: this.form.nowaddress,
+                  gender: this.form.gender,
+                  address: this.form.address,
+                  phone: this.form.phone,
+                });
                 this.form.date = "";
                 this.form.id = "";
                 this.form.nowaddress = "";
@@ -415,11 +433,6 @@ export default {
   },
   created() {
     this.$store.dispatch("b/qingqiu");
-    // beforeunload事件在页面刷新时先触发
-    // window.addEventListener('beforeunload', () => {
-    //   sessionStorage.setItem('store', JSON.stringify(this.$store.state))
-    //   console.log(2);
-    // })
   },
 };
 </script>

@@ -294,11 +294,14 @@ export default {
               !this.search ||
               data.name.toLowerCase().includes(this.search.trim().toLowerCase())
           );
+          this.$store.commit('b/XIUGAI',this.tableData)
           // this.tableData=this.tableData.filter((data) => !this.search || data.name.toLowerCase().includes(this.search.toLowerCase()))
         } else {
           this.tableData = this.newtableData;
+          this.$store.commit('b/XIUGAI',this.tableData)
         }
       },
+      
     },
   },
   methods: {
@@ -316,6 +319,7 @@ export default {
       this.nowaddress = row.nowaddress;
       this.sex = row.gender;
       this.num = index;
+      this.$store.commit('b/XIUGAI',this.tableData)
       this.$nextTick(() => {
         this.$refs.input.focus();
       });

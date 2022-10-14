@@ -327,10 +327,12 @@ export default {
         return value.id !== row.id
       }
       );
+      
       this.newtableData = this.newtableData.filter(function(value,index){
         return value.id !== row.id
       }
       );
+      this.$store.commit('b/XIUGAI',this.tableData)
     },
     //点击按钮切换页面
     handleCurrentChange(currentPage) {
@@ -355,6 +357,7 @@ export default {
       this.newtableData = this.newtableData.filter(
         (item) => !this.userIds.some((ele) => ele.id === item.id)
       );
+      this.$store.commit('b/XIUGAI',this.tableData)
       // console.log(this.tableData);
       this.$refs.multipleTable.clearSelection();
     },

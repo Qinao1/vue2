@@ -19,14 +19,17 @@ export default {
     // 用于操作数据
     mutations: {
         QINGQIU(state,value){
-            state.tableData = null
+            state.tableData=value
+        },
+        XIUGAI(state,value){
+            console.log(value);
             state.tableData=value
         }
     },
     // 用于储存数据
     state: {
         // personlist的数据
-        tableData:[]
+        tableData:[],
     },
     // 用于加工state
     getters: {

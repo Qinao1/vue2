@@ -91,6 +91,7 @@ export default {
   },
   mounted() {
       this.echarts();
+      console.log(this.manNumber);
   },
 
 };

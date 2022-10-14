@@ -431,7 +431,7 @@ export default {
       clearTimeout(this.timer);
     },
   },
-  created() {
+  mounted() {
     this.$store.dispatch("b/qingqiu");
   },
 };

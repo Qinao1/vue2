@@ -45,6 +45,9 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       // 修改echarts.init()为this.$echarts.init() [因为上面第二步，将echarts保存到全局变量$echarts中]
       let chart = this.$echarts.init(this.$refs.maina);
+      if (chart== null) { // 如果不存在，就进行初始化。
+    	chart= echarts.init(document.getElementById(main));
+    }
       // 指定图表的配置项和数据
       let option = {
         tooltip: {
@@ -88,6 +91,9 @@ export default {
   },
   mounted() {
       this.echarts();
+  },
+  created() {
+    this.$store.dispatch("b/qingqiu");
   },
 };
 </script>

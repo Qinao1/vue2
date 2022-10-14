@@ -30,14 +30,15 @@ export default {
     // 用于加工state
     getters: {
         man(state){
+            
             console.log(state.tableData,'变化了');
-             let a=ass.tableData.filter(function(value,index){
+             let a=state.tableData.filter(function(value,index){
                 return  value.gender == "男"
            })
            return a.length
         },  
         woman(state){
-             let a=ass.tableData.filter(function(value,index){
+             let a=state.tableData.filter(function(value,index){
                 return  value.gender == "女"
            })
            return a.length

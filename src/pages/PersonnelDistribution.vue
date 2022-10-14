@@ -92,9 +92,7 @@ export default {
   mounted() {
       this.echarts();
   },
-  created() {
-    this.$store.dispatch("b/qingqiu");
-  },
+
 };
 </script>
 

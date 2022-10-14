@@ -19,6 +19,7 @@ export default {
     // 用于操作数据
     mutations: {
         QINGQIU(state,value){
+            state.tableData = null
             state.tableData=value
         }
     },
@@ -30,8 +31,8 @@ export default {
     // 用于加工state
     getters: {
         man(state){
-            
-            console.log(state.tableData,'变化了');
+            // vuex是不能监听到数组的长度变化的
+            console.log(state.tableData.length,'变化了');
              let a=state.tableData.filter(function(value,index){
                 return  value.gender == "男"
            })

@@ -303,7 +303,7 @@ export default {
   },
   methods: {
     handleSelectionChange(selection) {
-      console.log(selection);
+      // console.log(selection);
       this.userIds = selection;
       // console.log(this.userIds);
     },
@@ -431,8 +431,9 @@ export default {
       clearTimeout(this.timer);
     },
   },
-  mounted() {
-    this.$store.dispatch("b/qingqiu");
+  created() {
+    this.tableData=this.$store.state.b.tableData
+    // this.$store.dispatch("b/qingqiu");
   },
 };
 </script>

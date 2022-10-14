@@ -114,7 +114,10 @@
         <div class="body">
           &nbsp;
           <!-- 指定组件的呈现位置 -->
+          
+<keep-alive>
           <router-view></router-view>
+        </keep-alive>
         </div>
       </div>
     </el-row>
@@ -225,7 +228,9 @@ export default {
       }
     );
   },
-
+  created() {
+    this.$store.dispatch("b/qingqiu");
+  },
 
 };
 </script>

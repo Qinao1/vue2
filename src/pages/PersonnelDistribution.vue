@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="main" ref="maina"></div>
-    <h2 >SaaS{{manNumber}}</h2>
   </div>
 </template>
 
